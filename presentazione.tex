@@ -8,5 +8,60 @@
 \begin{frame}
 \titlepage
 \end{frame}
+\section{Introduzione} %Section e' il titolo in alto (riga piccola)
+\begin{frame} %frame e' una nuova slide
+\frametitle{Perch\'e studiare i filesystem moderni} %titolo della slide
+I filesystem moderni sono una parte di tecnologia che ha raggiunto il limite della sua curva.
+\end{frame}
+
+\section{Cosa \'e un filesystem}
+\begin{frame}
+Un filesystem \'e un'astrazione della rappresentazione dei dati su disco.
+\end{frame}
+
+\section{Problema con i filesystem moderni}
+\begin{frame}
+I filesystem moderni sono piccole evoluzioni incrementali da quelli degli anni 90.
+Come faccio a fare un backup?
+Backup esterni o interni
+\end{frame}
+
+\section{Le soluzioni disponibili}
+\begin{frame}
+\frametitle{Microsoft}
+NTFS e porcate, salvataggio solo su disco locale. Parliamoci chiaro, funziona sostanzialmente male.
+\end{frame}
+\begin{frame}
+\frametitle{Linux}
+Ubuntu ha una sorta di programma di backup, ma ancora acerbo. Linux nel kernel non ha molto, e comunque ancora meno per l'utente comune (senza riga di comando non vado da nessuna parte).
+\end{frame}
+
+\begin{frame}
+\frametitle{Apple}
+Ha quello piu' semplice e utilizzabile da chiunque (con grafica accattivante). Solo backup esterno. Device apposito per backup con quello che si avvicina a quello che vorrei vedere, comunque).
+\end{frame}
+
+\section{ZFS}
+\begin{frame}
+\frametitle{ZFS}
+Piccola introduzione su ZFS, concetto di filesystem COW.
+\end{frame}
+
+\begin{frame}
+\frametitle{Snapshot e Clone}
+Concetto di snapshot e clone.
+\end{frame}
+
+\begin{frame}
+\frametitle{ZFS send and receive}
+concetto zfs send e receive
+\end{frame}
+
+\begin{frame}
+\frametitle{combinare il tutto}
+come combinare queste cose e avere una soluzione completa.
+\end{frame}
+
+
 
 \end{document}
