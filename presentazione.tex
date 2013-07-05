@@ -11,57 +11,180 @@
 \section{Introduzione} %Section e' il titolo in alto (riga piccola)
 \begin{frame} %frame e' una nuova slide
 \frametitle{Perch\'e studiare i filesystem moderni} %titolo della slide
-I filesystem moderni sono una parte di tecnologia che ha raggiunto il limite della sua curva.
+Le misure per evitare la perdita dei dati anche dopo un evento distruttivo si sono evolute nel tempo ed affinate. Queste tecniche per\`o si concentrano su problematiche ”hardware” nella perdita dei dati, trascurando la parte relativa ad errori software o della persona fisica (cancellazione dati per errore, corruzione dati etc..).
+\end{frame}
+
+\begin{frame}
+La maggior parte dei filesystem moderni non offre metodi efficaci e completi per evitare questi danni all'utente comune.
 \end{frame}
 
 \section{Cosa \'e un filesystem}
 \begin{frame}
-Un filesystem \'e un'astrazione della rappresentazione dei dati su disco.
+\frametitle{Cosa \'e un filesystem}
+Un filesystem \'e la parte di un sistema operativo dedicata alla gestione delle informazioni su disco (i file). 
+\newline
+Dal punto di vista dell’utente:
+\begin{itemize}
+\item come le informazioni vengono esposte (gerarchia, directory);
+\item regole di visualizzazione, modifica (permessi);
+\end{itemize}
+Un filesystem astrae tutte queste problematiche.
 \end{frame}
 
 \section{Problema con i filesystem moderni}
 \begin{frame}
-I filesystem moderni sono piccole evoluzioni incrementali da quelli degli anni 90.
-Come faccio a fare un backup?
-Backup esterni o interni
+Questi software sono stati creati quando le prestazioni e le dimensioni dei dischi erano totalmente differenti da quelli del giorno d'oggi. Inoltre adesso stanno emergendo tipologie di dischi che funzionano in modo totalmente differente (SSD).
+\newline
+I filesystem moderni inoltre non offrono nessuna funzionalit\'a "nativa" per creare dei backup.
 \end{frame}
 
 \section{Le soluzioni disponibili}
 \begin{frame}
 \frametitle{Microsoft}
-NTFS e porcate, salvataggio solo su disco locale. Parliamoci chiaro, funziona sostanzialmente male.
+Microsoft propone una utility chiamata "Ripristino configurazione di sistema" che cerca di riportare il sistema operativo, file di sistema, chiavi di registro e/o programmi installati ad un punto temporale nel quale l'utente ha la sicurezza che il sistema funzioni correttamente o comunque con un funzionamento coerente alle aspettative.
+%NTFS e porcate, salvataggio solo su disco locale. Parliamoci chiaro, funziona sostanzialmente male.
 \end{frame}
+
+\begin{frame}
+Da Windows Vista e successivi Microsoft ha invece sviluppato un software separato per la gestione di questa funzionalit\'a chiamato "Shadow Copy".
+\newline
+Questa nuova modalit\'a per il ripristino ha il vantaggio di poter monitorare e copiare per backup i file a livello di filesystem block di un qualsiasi file su disco.
+\end{frame}
+
+\begin{frame}
+Ci sono svantaggi:
+\begin{itemize}
+\item backup viene configurato per tutto il volume;
+\item mancanza di possibilit\'a di selezione di quali file includere;
+\item backup memorizzato sul volume stesso;
+\end{itemize}
+\end{frame}
+
 \begin{frame}
 \frametitle{Linux}
-Ubuntu ha una sorta di programma di backup, ma ancora acerbo. Linux nel kernel non ha molto, e comunque ancora meno per l'utente comune (senza riga di comando non vado da nessuna parte).
+Non \'e mai emerso uno strumento efficace e comunemente preso di riferimento se non per l’utility di sistema dd(1).
+Essa \'e un programma disponibile da Unix Version 7, che copia per blocchi di byte da un input ad un output. Diventa quindi possibile creare script per effettuare backup manuali e periodici.
+%Ubuntu ha una sorta di programma di backup, ma ancora acerbo. Linux nel kernel non ha molto, e comunque ancora meno per l'utente comune (senza riga di comando non vado da nessuna parte).
+\end{frame}
+
+\begin{frame}
+Ubuntu, la distribuzione pi\'u diffusa e user friendly, dalla versione 11.04 (Aprile 2011) ha incluso uno strumento di backup chiamato D\`ej\'a Dup poi successivamente rinominato Backup.
+\newline
+Backup crea un ”dump” completo, mentre le successive versioni sono incrementali (per queste versioni incrementali viene usato il programma rdiff).
+\end{frame}
+
+\begin{frame}
+Purtroppo come accennato precedentemente non \'e disponibile nessun software standard per il backup completo del sistema, ma soprattuto non \'e disponibile niente che possa aiutare l'utente base ad interagire in modo semplice ed intuitivo.
 \end{frame}
 
 \begin{frame}
 \frametitle{Apple}
-Ha quello piu' semplice e utilizzabile da chiunque (con grafica accattivante). Solo backup esterno. Device apposito per backup con quello che si avvicina a quello che vorrei vedere, comunque).
+Time Machine crea backup di tutto il sistema operativo, compresi i file personali dell'utente, in maniera incrementale.
+\newline
+Questo backup deve essere creato su un supporto diverso da quello di partenza, che sia esso un disco esterno o un'altra partizione dello stesso.
+%Ha quello piu' semplice e utilizzabile da chiunque (con grafica accattivante). 
+%Solo backup esterno. Device apposito per backup con quello che si avvicina a quello che vorrei vedere, comunque).
+\end{frame}
+
+\begin{frame}
+Time Machine utilizza dei link simbolici per effetuare backup incrementali. 
+\newline
+Questo \'e positivo da un lato perch\'e permette di risparmiare spazio disco, ma d'altro canto riduce il punto di fallimento a un solo file.
+\newline
+Time Machine effettua un backup a livello di file, ossia ogni volta che parte un servizio per il backup ottiene la lista dei file modificati e ne crea una nuova versione sul supporto di destinazione.
+\end{frame}
+
+\begin{frame}
+\'E quello che pi\'u si avvicina a quello che cerchiamo.
+\newline
+Facile da usare per l'utente, grafica accattivante, possibilit\'a di effettuare dei backup su un disco di rete.
+\end{frame}
+
+\begin{frame}
+\frametitle{Problema comune a tutte le proposte viste}
+Le tecniche viste hanno tutte dei problemi comuni:
+\begin{itemize}
+\item poca possibilit\'a di configurazione;
+\item device su cui effettuare il backup \'e interno o esterno, non entrambi;
+\item nessuno permette di verificare che i dati salvati non siano danneggiati;
+\end{itemize}
 \end{frame}
 
 \section{ZFS}
 \begin{frame}
 \frametitle{ZFS}
-Piccola introduzione su ZFS, concetto di filesystem COW.
+ZFS \'e un filesystem di nuova generazione sviluppato da Sun Microsystems (ora Oracle) ed \'e considerato un innovativo, completo ridisegno di un filesystem UNIX tradizionale. 
+\end{frame}
+
+\begin{frame}
+Tra le feature pi\'u rilevanti troviamo:
+\begin{itemize}
+\item Protezione contro la corruzione dei dati;
+\item Supporto per la memorizzazione di una grande quantit\'a di dati;
+\item Integrazione del concetto di filesystem e di gestione volumi;
+\item snapshot;
+\item Copy-On-Write cloni;
+\item Controllo continuo della validit\'a dei dati e riparazione automatica;
+\item RAID-Z;
+\item NFSv4 ACL native;
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+A differenza dei filesystem tradizionali, che risiedono su un device (volume) fisico singolo e quindi richiedono un volume manager per usare pi\'u di un device, i filesystem ZFS sono costruiti sopra un layer di storage pool virtuali chiamati zpool. 
+\newline
+Uno zpool \'ecomposot da virtual device vdevs, che sono loro stessi construiti su block device: file, partizioni di hard drive, interi drive, con quest'ultima modalit\'a indicata come preferita.
+\end{frame}
+
+\begin{frame}
+ZFS usa un modello transazionale Copy-On-Write. Tutti i blocchi puntatori nel filesystem contengono un checksum a 256 bit oppure un hash a 256 bit (a scelta fra Fletcher-2, Fletcher-4 o SHA-256) del blocco a cui punta che viene verificato quando il blocco viene letto. Blocchi che contengono dati attivi non sono mai sovrascritti sullo stesso blocco; invece un nuovo blocco viene allocato, i dati modificati vengono scritti in questo nuovo spazio, poi tutti i metadati che fanno riferimento ai dati vecchi vengono letti, riallocati e riscritti nello stesso modo. 
 \end{frame}
 
 \begin{frame}
 \frametitle{Snapshot e Clone}
-Concetto di snapshot e clone.
+Il modello Copy-On-Write utilizzzato da ZFS ha un altro grande vantaggio: quando ZFS scrive nuovi dati, invece di liberare o sovrascrivere i blocchi contenenti i vecchi dati vengono invece conservati, creando una versione "snapshot" del filesystem.
 \end{frame}
 
 \begin{frame}
-\frametitle{ZFS send and receive}
-concetto zfs send e receive
+Cloni sono un tipo particolare di snapshot, in quanto sono modificabili. Infatti alla creazione di un clone viene creato un filesystem indipendente che comunque condivide i blocchi con il filesystem "padre". Modificando il filesystem clone nuovi blocchi dati sono creati per riflettere questi cambiamenti, ma blocchi dati non modificati continuano ad essere condivisi (a prescindere da quanti cloni esistano).
 \end{frame}
 
 \begin{frame}
-\frametitle{combinare il tutto}
-come combinare queste cose e avere una soluzione completa.
+\frametitle{ZFS send}
+Il comando zfs send crea uno stream di byte rappresentante uno snapshot che viene scritto su standard output. Di default uno stream completo viene generato. Come un qualsiasi stream esso pu\'o essere reindirizzato su un file o addirittura su un altro sistema.
+\newline
+Per creare uno stream di byte non completo ma incrementale basta specificare l'opzione -i.
 \end{frame}
 
+\begin{frame}
+\frametitle{ZFS receive}
+Il comando ZFS receive \'e la controparte di ZFS send. Esso permette di creare uno snapshot i cui contenuti sono specificati dallo stream che \'e fornito nello standard input. Se in ingresso \'e fornito un filesystem completo ne viene creato uno nuovo che lo rappresenta.
+\end{frame}
+
+\begin{frame}
+\frametitle{Combinare send e receive}
+Questi due comandi sono il cuore per poter automatizzare una strategia di backup. Infatti grazie a ZFS send possiamo trasmettere lo stato corrente del nostro filesystem e con ZFS receive possiamo salvarlo e riutilizzarlo successivamente.
+Questo scambio di dati tra send e receive pu\'o essere effettuato tramite un qualsiasi protocollo per lo scambio di dati, infatti dobbiamo solo avere un protocollo che permetta uno stream di dati.
+\end{frame}
+
+\begin{frame}
+\frametitle{I punti deboli nei sistemi citati}
+Prima avevamo citato i seguenti problemi nei sistemi analizzati:
+\begin{itemize}
+\item backup viene configurato per tutto il volume;
+\item mancanza di possibilit\'a di selezione di quali file includere;
+\item backup memorizzato sul volume stesso;
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+ZFS risolve tutti questi problemi in quanto:
+\begin{itemize}
+\item backup pu\'o essere configurato per filesystem o dataset (creabili e definibili dall'utente);
+\item creando una struttara di dataset in modo opportuno si configura che file includere;
+\item backup memorizzato dove desidera l'utente (snapshot possso essere tenuti sullo stesso disco oppure mandati su un altro disco su cui \'e stata salvata una versione precedente del filesystem);
+\end{itemize}
+\end{frame}
 
 
 \end{document}
