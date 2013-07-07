@@ -148,7 +148,7 @@ Il modello Copy-On-Write utilizzzato da ZFS ha un altro grande vantaggio: quando
 \end{frame}
 
 \begin{frame}
-Cloni sono un tipo particolare di snapshot, in quanto sono modificabili. Infatti alla creazione di un clone viene instanziato un filesystem indipendente che comunque condivide i blocchi con il filesystem "padre". Modificando il filesystem clone nuovi blocchi dati sono creati per riflettere questi cambiamenti, ma blocchi dati non modificati continuano ad essere condivisi (a prescindere da quanti cloni esistano).
+Cloni sono un tipo particolare di snapshot, in quanto sono modificabili. Infatti alla creazione di un clone viene istanziato un filesystem indipendente che comunque condivide i blocchi con il filesystem "padre". Modificando il filesystem clone nuovi blocchi dati sono creati per riflettere questi cambiamenti, ma blocchi dati non modificati continuano ad essere condivisi (a prescindere da quanti cloni esistano).
 \end{frame}
 
 \begin{frame}
